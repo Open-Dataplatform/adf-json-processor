@@ -40,7 +40,7 @@ class WidgetManager:
 
             # Define default widget values
             default_values = {
-                "ADFConfig": '["energinet", "DataPlatform_v3.0", "data-factory", "main", "pipeline"]',
+                "ADFConfig": '{ "organization": "energinet", "project": "DataPlatform_v3.0", "repository": "data-factory", "branch": "main", "folder_path": "pipeline" }',
                 "PersonalAccessTokenKeyVaultName": "token-devops-PAT-data-quality",
                 "SourceStorageAccount": "dplandingstoragetest",
                 "DestinationStorageAccount": "dpuniformstoragetest",

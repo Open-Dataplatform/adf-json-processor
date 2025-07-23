@@ -211,6 +211,23 @@ class Processor:
                         activity_node["ActivityTargetType"] = "Pipeline"
                 elif activity_type == "DatabricksNotebook":
                     notebook_path = activity.get("typeProperties", {}).get("notebookPath", "")
+                    if not isinstance(notebook_path, str):
+                        self.logger.log_warning(f"Notebook path is not a string: {notebook_path}, trying to identify notebook name from expression and DatasetIdentifyer.")
+                        dataset_identifyer = adf_json.get("properties").get("parameters").get("DatasetIdentifier").get("defaultValue")
+                        if not dataset_identifyer:
+                            self.logger.log_warning(f"Could not determine dataset identifier from ADF JSON.")
+                            continue
+                        if notebook_path.get("type") == "Expression":
+                            expr_list = notebook_path.get("value").split("'")
+                            path_start = ''
+                            for expr in expr_list:
+                                if "Deploy" in expr:
+                                    path_start = expr
+                            if not path_start:
+                                self.logger.log_warning(f"Could not determine notebook paht from dataset identifier: {dataset_identifyer}")
+                                continue
+                            notebook_path = path_start + dataset_identifyer
+                            self.logger.log_message(f"Extracted notebook path: {notebook_path}")
                     notebook_name = self.helper.extract_last_part(notebook_path)
                     notebook_target_id = self.helper.generate_hash_key(notebook_name, activity_type, pipeline_id)
                     activity_node["ActivityTargetId"] = notebook_target_id

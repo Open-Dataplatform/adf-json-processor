@@ -224,7 +224,7 @@ class Processor:
                                 if "Deploy" in expr:
                                     path_start = expr
                             if not path_start:
-                                self.logger.log_warning(f"Could not determine notebook paht from dataset identifier: {dataset_identifyer}")
+                                self.logger.log_warning(f"Could not determine notebook path from dataset identifier: {dataset_identifyer}")
                                 continue
                             notebook_path = path_start + dataset_identifyer
                             self.logger.log_message(f"Extracted notebook path: {notebook_path}")
